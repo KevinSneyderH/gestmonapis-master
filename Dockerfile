@@ -32,6 +32,9 @@ RUN composer install
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage
 
+# Switch to non-root user
+USER www-data
+
 # Expose port 8000
 EXPOSE 8000
 
