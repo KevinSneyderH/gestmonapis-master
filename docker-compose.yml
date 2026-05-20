@@ -18,6 +18,9 @@ services:
       DB_DATABASE: gestmon
       DB_USERNAME: root
       DB_PASSWORD: root
+
+    command: sh -c "composer install && php artisan key:generate --force && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+
     networks:
       - gestmon-network
 
