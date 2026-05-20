@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -6,12 +6,16 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: gestmon-api
+
     ports:
       - "8000:8000"
+
     volumes:
       - .:/var/www/html
+
     depends_on:
       - db
+
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -19,7 +23,8 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: root
 
-    command: sh -c "composer install && php artisan key:generate --force && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+    # Opcional: evita que el contenedor muera sin razón silenciosa
+    restart: unless-stopped
 
     networks:
       - gestmon-network
@@ -27,13 +32,19 @@ services:
   db:
     image: mysql:8.0
     container_name: gestmon-db
+
     ports:
-      - "3307:3306"  # Changed from 3306:3306 to 3307:3306
+      - "3307:3306"
+
     environment:
       MYSQL_DATABASE: gestmon
       MYSQL_ROOT_PASSWORD: root
+
     volumes:
       - mysql-data:/var/lib/mysql
+
+    restart: unless-stopped
+
     networks:
       - gestmon-network
 
