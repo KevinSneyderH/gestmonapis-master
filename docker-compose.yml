@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gestmon-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: gestmon
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    networks:
+      - gestmon-network
+
+  db:
+    image: mysql:8.0
+    container_name: gestmon-db
+    ports:
+      - "3307:3306"  # Changed from 3306:3306 to 3307:3306
+    environment:
+      MYSQL_DATABASE: gestmon
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - gestmon-network
+
+networks:
+  gestmon-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
